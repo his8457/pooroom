@@ -108,6 +108,9 @@ dump.rdb
 notes/
 TODO.md
 .notes/
+#CLAUDE
+CLAUDE.md
+.claude/
 
 # 압축 파일
 *.zip
