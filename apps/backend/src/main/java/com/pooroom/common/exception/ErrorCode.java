@@ -18,6 +18,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "U003", "사용자를 찾을 수 없습니다."),
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "U004", "잘못된 비밀번호입니다."),
     USER_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "U005", "인증되지 않은 사용자입니다."),
+    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "U006", "비밀번호가 일치하지 않습니다."),
+    NICKNAME_DUPLICATION(HttpStatus.CONFLICT, "U007", "이미 사용 중인 닉네임입니다."),
 
     // Authentication & Authorization
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A001", "유효하지 않은 토큰입니다."),
