@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { authService } from '../../api/auth';
+import { authService } from '../../api/authService';
 import type { SignUpRequest } from '../../types/auth';
 import {
   Container,
