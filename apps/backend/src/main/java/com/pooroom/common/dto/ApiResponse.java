@@ -23,7 +23,7 @@ public class ApiResponse<T> {
         return new ApiResponse<>(true, "성공", data, null, LocalDateTime.now());
     }
 
-    public static <T> ApiResponse<T> success(String message, T data) {
+    public static <T> ApiResponse<T> success(T data, String message) {
         return new ApiResponse<>(true, message, data, null, LocalDateTime.now());
     }
 

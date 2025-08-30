@@ -16,9 +16,14 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   accessToken: string;
+  refreshToken: string;
   tokenType: string;
   expiresIn: number;
   user: UserResponse;
+}
+
+export interface RefreshTokenRequest {
+  refreshToken: string;
 }
 
 export interface UserResponse {
@@ -43,9 +48,6 @@ export interface ApiResponse<T> {
   success: boolean;
   message: string;
   data?: T;
-  error?: {
-    code: string;
-    message: string;
-  };
+  errorCode?: string;
   timestamp: string;
 }
