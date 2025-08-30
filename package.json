@@ -1,7 +1,7 @@
 {
   "name": "pooroom",
   "version": "1.0.0",
-  "description": "대규모 포트폴리오 웹 애플리케이션",
+  "description": "POOROOM 온라인 쇼핑몰 이커머스 플랫폼",
   "private": true,
   "scripts": {
     "docker:start": "docker-compose up -d",
@@ -22,12 +22,15 @@
     "format:frontend": "cd apps/frontend && npm run format"
   },
   "keywords": [
+    "ecommerce",
+    "shopping-mall",
+    "fashion",
     "spring-boot",
     "react",
     "typescript",
     "mysql",
     "redis",
-    "portfolio"
+    "women-fashion"
   ],
   "engines": {
     "node": ">=20.0.0"
