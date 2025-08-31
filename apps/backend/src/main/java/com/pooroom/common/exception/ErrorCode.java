@@ -37,6 +37,18 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "CT001", "카테고리를 찾을 수 없습니다."),
     CATEGORY_ALREADY_EXISTS(HttpStatus.CONFLICT, "CT002", "이미 존재하는 카테고리입니다."),
 
+    // Product
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "PR001", "상품을 찾을 수 없습니다."),
+    PRODUCT_NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "PR002", "판매 중단된 상품입니다."),
+    PRODUCT_OUT_OF_STOCK(HttpStatus.BAD_REQUEST, "PR003", "품절된 상품입니다."),
+    INSUFFICIENT_STOCK(HttpStatus.BAD_REQUEST, "PR004", "재고가 부족합니다."),
+
+    // Cart
+    CART_NOT_FOUND(HttpStatus.NOT_FOUND, "CR001", "장바구니를 찾을 수 없습니다."),
+    CART_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "CR002", "장바구니 상품을 찾을 수 없습니다."),
+    CART_ITEM_ALREADY_EXISTS(HttpStatus.CONFLICT, "CR003", "이미 장바구니에 담긴 상품입니다."),
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "CR004", "접근 권한이 없습니다."),
+
     // File
     FILE_UPLOAD_ERROR(HttpStatus.BAD_REQUEST, "F001", "파일 업로드에 실패했습니다."),
     INVALID_FILE_EXTENSION(HttpStatus.BAD_REQUEST, "F002", "지원하지 않는 파일 확장자입니다."),
