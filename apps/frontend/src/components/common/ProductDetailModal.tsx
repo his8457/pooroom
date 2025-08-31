@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { productService } from '../../api/productService';
+import { useCartStore } from '../../store/cartStore';
 import { LoadingSpinner } from './LoadingSpinner';
 import { PlaceholderImage } from './PlaceholderImage';
 import {
@@ -39,6 +40,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const [quantity, setQuantity] = useState(1);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const { addToCart } = useCartStore();
+  
   const {
     data: product,
     isLoading,
@@ -54,6 +59,24 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (!product || !product.isInStock) return;
+    
+    setIsAddingToCart(true);
+    try {
+      await addToCart(product.id, quantity);
+      onClose();
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
+
+  const handleQuantityChange = (newQuantity: number) => {
+    if (newQuantity >= 1 && (!product || newQuantity <= product.stockQuantity)) {
+      setQuantity(newQuantity);
     }
   };
 
@@ -242,11 +265,61 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             </StockInfo>
 
             <ActionSection>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                <span>수량:</span>
+                <button 
+                  onClick={() => handleQuantityChange(quantity - 1)}
+                  disabled={quantity <= 1}
+                  style={{ 
+                    width: '32px', 
+                    height: '32px', 
+                    border: '1px solid #ddd', 
+                    background: 'white',
+                    cursor: 'pointer' 
+                  }}
+                >
+                  -
+                </button>
+                <input 
+                  type="number" 
+                  value={quantity}
+                  onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 1)}
+                  min="1"
+                  max={product.stockQuantity}
+                  style={{ 
+                    width: '60px', 
+                    height: '32px', 
+                    textAlign: 'center', 
+                    border: '1px solid #ddd' 
+                  }}
+                />
+                <button 
+                  onClick={() => handleQuantityChange(quantity + 1)}
+                  disabled={quantity >= product.stockQuantity}
+                  style={{ 
+                    width: '32px', 
+                    height: '32px', 
+                    border: '1px solid #ddd', 
+                    background: 'white',
+                    cursor: 'pointer' 
+                  }}
+                >
+                  +
+                </button>
+              </div>
+              
               <AddToCartButton
-                disabled={!product.isInStock}
+                onClick={handleAddToCart}
+                disabled={!product.isInStock || isAddingToCart}
                 isInStock={product.isInStock}
               >
-                {product.isInStock ? '장바구니 담기' : '품절'}
+                {isAddingToCart ? (
+                  <LoadingSpinner type="dots" size="small" showText={false} />
+                ) : product.isInStock ? (
+                  '장바구니 담기'
+                ) : (
+                  '품절'
+                )}
               </AddToCartButton>
             </ActionSection>
           </InfoSection>
