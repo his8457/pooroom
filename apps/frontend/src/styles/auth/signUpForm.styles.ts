@@ -117,19 +117,26 @@ export const SubmitButton = styled.button<{ isLoading?: boolean }>`
   transition: all 0.2s ease;
   margin-top: 4px;
   opacity: ${props => props.isLoading ? 0.7 : 1};
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 
   &:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: 0 8px 20px -5px rgba(102, 126, 234, 0.4);
   }
 
-  &:active {
+  &:active:not(:disabled) {
     transform: translateY(0);
   }
 
   &:disabled {
     cursor: not-allowed;
     opacity: 0.6;
+    transform: none;
+    pointer-events: none;
   }
 `;
 
