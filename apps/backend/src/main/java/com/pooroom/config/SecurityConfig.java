@@ -41,6 +41,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/check-email").permitAll()
                         .requestMatchers("/api/auth/verify-email").permitAll()  // 이메일 인증용
                         .requestMatchers("/api/auth/verify-phone").permitAll()  // 휴대폰 인증용
+                        // 상품 조회 API (인증 없이 접근 가능)
+                        .requestMatchers("/api/products/**").permitAll()
+                        .requestMatchers("/api/categories/**").permitAll()
+                        .requestMatchers("/api/brands/**").permitAll()
                         // 시스템 모니터링용 
                         .requestMatchers("/api/health/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
