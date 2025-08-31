@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -32,8 +34,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request) {
-        LoginResponse loginResponse = authService.login(request);
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest request, 
+                                                          HttpServletRequest httpRequest) {
+        String deviceInfo = extractDeviceInfo(httpRequest);
+        String ipAddress = extractIpAddress(httpRequest);
+        
+        LoginResponse loginResponse = authService.login(request, deviceInfo, ipAddress);
         return ResponseEntity.ok(ApiResponse.success(loginResponse));
     }
 
@@ -53,5 +59,31 @@ public class AuthController {
     public ResponseEntity<ApiResponse<Boolean>> checkEmailDuplication(@RequestParam String email) {
         boolean exists = userService.existsByEmail(email);
         return ResponseEntity.ok(ApiResponse.success(!exists));
+    }
+
+    private String extractDeviceInfo(HttpServletRequest request) {
+        String userAgent = request.getHeader("User-Agent");
+        if (userAgent == null) return "Unknown Device";
+        
+        // 간단한 디바이스 정보 추출
+        if (userAgent.contains("Mobile")) return "Mobile Device";
+        if (userAgent.contains("Chrome")) return "Chrome Browser";
+        if (userAgent.contains("Firefox")) return "Firefox Browser";
+        if (userAgent.contains("Safari")) return "Safari Browser";
+        return "Desktop Browser";
+    }
+
+    private String extractIpAddress(HttpServletRequest request) {
+        String xForwardedFor = request.getHeader("X-Forwarded-For");
+        if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
+            return xForwardedFor.split(",")[0].trim();
+        }
+        
+        String xRealIp = request.getHeader("X-Real-IP");
+        if (xRealIp != null && !xRealIp.isEmpty()) {
+            return xRealIp;
+        }
+        
+        return request.getRemoteAddr();
     }
 }
