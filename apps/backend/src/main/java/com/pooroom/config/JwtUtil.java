@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Component
@@ -62,8 +66,22 @@ public class JwtUtil {
         try {
             parseToken(token);
             return true;
+        } catch (ExpiredJwtException e) {
+            // 만료된 토큰의 경우 시간을 한국시간으로 변환하여 로그 출력
+            Instant expiredAt = e.getClaims().getExpiration().toInstant();
+            Instant currentTime = Instant.now();
+            
+            ZonedDateTime expiredAtKst = expiredAt.atZone(ZoneId.of("Asia/Seoul"));
+            ZonedDateTime currentTimeKst = currentTime.atZone(ZoneId.of("Asia/Seoul"));
+            
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            
+            log.debug("JWT 토큰 만료: 만료시간={}, 현재시간={} (한국시간)", 
+                    expiredAtKst.format(formatter), 
+                    currentTimeKst.format(formatter));
+            return false;
         } catch (JwtException | IllegalArgumentException e) {
-            log.debug("Invalid JWT token: {}", e.getMessage());
+            log.debug("JWT 토큰 검증 실패: {}", e.getMessage());
             return false;
         }
     }
