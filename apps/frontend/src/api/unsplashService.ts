@@ -120,6 +120,53 @@ export const getProductImages = async (count: number = 8): Promise<UnsplashImage
   }
 };
 
+// 상품별로 개별 이미지 가져오기
+export const getProductImageByCategory = async (categoryName: string, productId?: number): Promise<string> => {
+  try {
+    // 카테고리명을 기반으로 검색 쿼리 생성
+    const categoryQueries: Record<string, string> = {
+      '블라우스': 'fashion blouse shirt woman',
+      '셔츠': 'fashion shirt woman elegant',
+      '티셔츠': 'fashion tshirt casual woman',
+      '니트': 'fashion knit sweater woman',
+      '청바지': 'fashion jeans denim woman',
+      '슬랙스': 'fashion pants trousers woman',
+      '스커트': 'fashion skirt woman',
+      '원피스': 'fashion dress woman elegant',
+      '재킷': 'fashion jacket woman',
+      '코트': 'fashion coat woman',
+      '패딩': 'fashion padding jacket woman',
+      '가디건': 'fashion cardigan woman'
+    };
+
+    const query = categoryQueries[categoryName] || `fashion ${categoryName} woman`;
+    
+    // productId를 시드로 사용해 일관된 이미지 선택
+    const page = productId ? ((productId - 1) % 5) + 1 : 1;
+    
+    const result = await unsplash.search.getPhotos({
+      query,
+      page,
+      perPage: 10,
+      orientation: 'portrait'
+    });
+
+    if (result.errors || !result.response?.results.length) {
+      console.error('Unsplash API 에러:', result.errors);
+      return '';
+    }
+
+    // productId를 기반으로 특정 이미지 선택 (일관성 보장)
+    const imageIndex = productId ? (productId - 1) % result.response.results.length : 0;
+    const image = result.response.results[imageIndex];
+    
+    return `${image.urls.raw}&w=300&h=400&fit=crop&crop=center`;
+  } catch (error) {
+    console.error('상품 이미지 로드 실패:', error);
+    return '';
+  }
+};
+
 // 배너 이미지 가져오기 (800x400 가로형)
 export const getBannerImages = async (): Promise<UnsplashImage[]> => {
   try {
