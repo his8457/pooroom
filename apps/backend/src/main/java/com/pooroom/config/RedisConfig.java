@@ -2,7 +2,6 @@ package com.pooroom.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,12 +37,8 @@ public class RedisConfig {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         
-        Hibernate5Module hibernateModule = new Hibernate5Module();
-        hibernateModule.disable(Hibernate5Module.Feature.USE_TRANSIENT_ANNOTATION);
-        hibernateModule.enable(Hibernate5Module.Feature.FORCE_LAZY_LOADING);
-        objectMapper.registerModule(hibernateModule);
-        
-        objectMapper.findAndRegisterModules();
+        // javax.persistence 호환성 문제 해결을 위해 기본 어노테이션만 사용
+        // Hibernate 관련 어노테이션 처리 비활성화
         
         GenericJackson2JsonRedisSerializer jsonSerializer = new GenericJackson2JsonRedisSerializer(objectMapper);
         
