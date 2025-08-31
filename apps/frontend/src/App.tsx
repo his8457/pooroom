@@ -4,6 +4,7 @@ import { SignUpPage } from './pages/SignUpPage';
 import { LoginPage } from './pages/LoginPage';
 import { MainPage } from './pages/MainPage';
 import { ProductListPage } from './pages/ProductListPage';
+import { CartPage } from './pages/CartPage';
 import { SpinnerTestPage } from './pages/SpinnerTestPage';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 import { PageLoader } from './components/common/PageLoader';
@@ -28,6 +29,14 @@ function AppContent() {
           } 
         />
         <Route path="/products" element={<ProductListPage />} />
+        <Route 
+          path="/cart" 
+          element={
+            <ProtectedRoute>
+              <CartPage />
+            </ProtectedRoute>
+          } 
+        />
       </Routes>
     </>
   );

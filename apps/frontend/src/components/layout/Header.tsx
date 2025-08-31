@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { tokenManager } from '../../utils/tokenManager';
+import { CartIcon } from '../cart/CartIcon';
 import { 
   HeaderContainer, 
   HeaderContent, 
@@ -39,9 +40,7 @@ export const Header: React.FC = () => {
         </SearchContainer>
 
         <UserActions>
-          <ActionButton type="button">
-            🛒
-          </ActionButton>
+          <CartIcon />
           <ActionButton type="button">
             👤
           </ActionButton>
