@@ -3,6 +3,7 @@ package com.pooroom.domain.product.service;
 import com.pooroom.common.exception.BusinessException;
 import com.pooroom.common.exception.ErrorCode;
 import com.pooroom.common.service.CacheService;
+import com.pooroom.domain.product.dto.ProductResponse;
 import com.pooroom.domain.product.entity.Product;
 import com.pooroom.domain.product.entity.ProductStatus;
 import com.pooroom.domain.product.repository.ProductRepository;
@@ -30,22 +31,46 @@ public class ProductService {
     private static final Duration PRODUCT_LIST_CACHE_DURATION = Duration.ofMinutes(10);
 
     public Product findById(Long id) {
-        // 캐시에서 먼저 조회
+        // 캐시에서 먼저 조회 (DTO 형태로 저장)
         Object cachedProduct = cacheService.getCachedProduct(id);
-        if (cachedProduct instanceof Product) {
+        if (cachedProduct instanceof ProductResponse) {
             log.debug("상품 캐시에서 조회: productId={}", id);
-            return (Product) cachedProduct;
+            // 캐시된 DTO에서 필요한 경우 실제 엔티티를 다시 조회
+            return productRepository.findById(id)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
         }
         
         // DB에서 조회
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
         
-        // 캐시에 저장
-        cacheService.cacheProduct(id, product, PRODUCT_CACHE_DURATION);
-        log.debug("상품 DB에서 조회 후 캐시 저장: productId={}", id);
+        // DTO로 변환하여 캐시에 저장
+        ProductResponse productResponse = ProductResponse.from(product);
+        cacheService.cacheProduct(id, productResponse, PRODUCT_CACHE_DURATION);
+        log.debug("상품 DB에서 조회 후 DTO로 캐시 저장: productId={}", id);
         
         return product;
+    }
+    
+    public ProductResponse findByIdAsDto(Long id) {
+        // 캐시에서 먼저 조회
+        Object cachedProduct = cacheService.getCachedProduct(id);
+        if (cachedProduct instanceof ProductResponse) {
+            log.debug("상품 DTO 캐시에서 조회: productId={}", id);
+            return (ProductResponse) cachedProduct;
+        }
+        
+        // DB에서 조회 후 DTO 변환
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ENTITY_NOT_FOUND));
+        
+        ProductResponse productResponse = ProductResponse.from(product);
+        
+        // DTO로 캐시에 저장
+        cacheService.cacheProduct(id, productResponse, PRODUCT_CACHE_DURATION);
+        log.debug("상품 DB에서 조회 후 DTO로 캐시 저장: productId={}", id);
+        
+        return productResponse;
     }
 
     public Product findBySku(String sku) {
@@ -84,14 +109,14 @@ public class ProductService {
     @SuppressWarnings("unchecked")
     public List<Product> findNewProducts() {
         String cacheKey = "newProducts";
-        Object cached = cacheService.getCachedProduct(Long.valueOf(cacheKey.hashCode()));
+        Object cached = cacheService.getCachedProductList(cacheKey);
         if (cached instanceof List) {
             log.debug("신상품 목록 캐시에서 조회");
             return (List<Product>) cached;
         }
         
         List<Product> products = productRepository.findTop10ByStatusOrderByCreatedAtDesc(ProductStatus.ACTIVE);
-        cacheService.cacheProduct(Long.valueOf(cacheKey.hashCode()), products, PRODUCT_LIST_CACHE_DURATION);
+        cacheService.cacheProductList(cacheKey, products, PRODUCT_LIST_CACHE_DURATION);
         log.debug("신상품 목록 DB에서 조회 후 캐시 저장: count={}", products.size());
         
         return products;
@@ -100,14 +125,14 @@ public class ProductService {
     @SuppressWarnings("unchecked")
     public List<Product> findRecommendedProducts() {
         String cacheKey = "recommendedProducts";
-        Object cached = cacheService.getCachedProduct(Long.valueOf(cacheKey.hashCode()));
+        Object cached = cacheService.getCachedProductList(cacheKey);
         if (cached instanceof List) {
             log.debug("추천상품 목록 캐시에서 조회");
             return (List<Product>) cached;
         }
         
         List<Product> products = productRepository.findTop10ByStatusAndIsFeaturedOrderByCreatedAtDesc(ProductStatus.ACTIVE, true);
-        cacheService.cacheProduct(Long.valueOf(cacheKey.hashCode()), products, PRODUCT_LIST_CACHE_DURATION);
+        cacheService.cacheProductList(cacheKey, products, PRODUCT_LIST_CACHE_DURATION);
         log.debug("추천상품 목록 DB에서 조회 후 캐시 저장: count={}", products.size());
         
         return products;

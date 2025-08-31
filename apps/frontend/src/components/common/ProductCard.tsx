@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PlaceholderImage } from './PlaceholderImage';
+import { useCartStore } from '../../store/cartStore';
+import { LoadingSpinner } from './LoadingSpinner';
 import { 
   CardContainer, 
   ProductInfo, 
@@ -10,7 +12,9 @@ import {
   DiscountPrice, 
   Badge,
   NewBadge,
-  SaleBadge
+  SaleBadge,
+  ActionButtons,
+  AddToCartButton
 } from '../../styles/components/productCard.styles';
 
 interface Product {
@@ -27,13 +31,26 @@ interface Product {
 interface ProductCardProps {
   product: Product;
   onClick?: (productId: number) => void;
+  showAddToCart?: boolean;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, showAddToCart = true }) => {
   const { id, name, price, discountPrice, imageUrl, brand, isNew, isSale } = product;
+  const { addToCart, isLoading } = useCartStore();
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   const handleClick = () => {
     onClick?.(id);
+  };
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsAddingToCart(true);
+    try {
+      await addToCart(id, 1);
+    } finally {
+      setIsAddingToCart(false);
+    }
   };
 
   // 색상 매핑
@@ -80,6 +97,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) =>
             <DiscountPrice>{price.toLocaleString()}원</DiscountPrice>
           )}
         </PriceContainer>
+        
+        {showAddToCart && (
+          <ActionButtons>
+            <AddToCartButton 
+              onClick={handleAddToCart}
+              disabled={isAddingToCart || isLoading}
+            >
+              {isAddingToCart ? (
+                <LoadingSpinner type="dots" size="small" showText={false} />
+              ) : (
+                '장바구니 담기'
+              )}
+            </AddToCartButton>
+          </ActionButtons>
+        )}
       </ProductInfo>
     </CardContainer>
   );

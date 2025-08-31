@@ -58,6 +58,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 마지막 활동 시간 업데이트
                 sessionService.updateLastActivity(user.getId());
 
+                // Request에 userId 설정 (Controller에서 사용)
+                request.setAttribute("userId", user.getId());
+                request.setAttribute("userEmail", email);
+                
                 // Authentication 객체 생성
                 List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
                 UsernamePasswordAuthenticationToken authentication = 

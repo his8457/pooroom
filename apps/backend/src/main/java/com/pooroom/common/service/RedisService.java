@@ -1,5 +1,6 @@
 package com.pooroom.common.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisService {
 
     private final RedisTemplate<String, Object> redisTemplate;
+    private final ObjectMapper objectMapper;
 
     public void setValue(String key, Object value) {
         redisTemplate.opsForValue().set(key, value);
@@ -33,8 +35,23 @@ public class RedisService {
 
     public <T> T getValue(String key, Class<T> clazz) {
         Object value = getValue(key);
-        if (value != null && clazz.isInstance(value)) {
-            return clazz.cast(value);
+        if (value != null) {
+            try {
+                if (clazz.isInstance(value)) {
+                    return clazz.cast(value);
+                }
+                
+                // LinkedHashMap을 목표 클래스로 변환 시도
+                if (value instanceof java.util.Map) {
+                    log.debug("Redis LinkedHashMap을 {}로 변환 시도: key={}", clazz.getSimpleName(), key);
+                    return objectMapper.convertValue(value, clazz);
+                }
+                
+                log.debug("Redis 값 타입 불일치: key={}, expected={}, actual={}", 
+                        key, clazz.getSimpleName(), value.getClass().getSimpleName());
+            } catch (Exception e) {
+                log.debug("Redis 값 변환 실패: key={}, error={}", key, e.getMessage());
+            }
         }
         return null;
     }

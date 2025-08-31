@@ -88,3 +88,38 @@ export const DiscountPrice = styled.span`
   color: ${colors.text.primary};
   font-weight: 700;
 `;
+
+export const ActionButtons = styled.div`
+  margin-top: ${spacing.md};
+  display: flex;
+  gap: ${spacing.sm};
+`;
+
+export const AddToCartButton = styled.button`
+  flex: 1;
+  padding: ${spacing.sm} ${spacing.md};
+  background-color: ${colors.primary.main};
+  color: ${colors.text.inverse};
+  border: none;
+  border-radius: ${borderRadius.sm};
+  font-size: ${fontSize.sm};
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover:not(:disabled) {
+    background-color: ${colors.primaryDark};
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    background-color: ${colors.background.disabled};
+    color: ${colors.text.disabled};
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+`;

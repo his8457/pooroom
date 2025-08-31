@@ -43,6 +43,16 @@ public class CacheService {
         String key = PRODUCT_CACHE_PREFIX + productId;
         return redisService.getValue(key);
     }
+    
+    public void cacheProductList(String cacheKey, Object productListData, Duration duration) {
+        String key = PRODUCT_CACHE_PREFIX + "list:" + cacheKey;
+        redisService.setValue(key, productListData, duration);
+    }
+
+    public Object getCachedProductList(String cacheKey) {
+        String key = PRODUCT_CACHE_PREFIX + "list:" + cacheKey;
+        return redisService.getValue(key);
+    }
 
     public void cacheCategories(Object categoriesData, Duration duration) {
         String key = CATEGORY_CACHE_PREFIX + "all";
@@ -103,6 +113,18 @@ public class CacheService {
 
     public void invalidateBrandCache() {
         String key = BRAND_CACHE_PREFIX + "all";
+        redisService.deleteKey(key);
+    }
+
+    public Object get(String key) {
+        return redisService.getValue(key);
+    }
+
+    public void put(String key, Object value, Duration duration) {
+        redisService.setValue(key, value, duration);
+    }
+
+    public void delete(String key) {
         redisService.deleteKey(key);
     }
 }

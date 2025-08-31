@@ -34,7 +34,13 @@ public class SessionService {
 
     public UserSession getSession(Long userId) {
         String key = SESSION_PREFIX + userId;
-        return redisService.getValue(key, UserSession.class);
+        Object rawValue = redisService.getValue(key);
+        if (rawValue != null) {
+            log.debug("Redis에서 세션 raw 데이터 조회: userId={}, 타입={}", userId, rawValue.getClass().getSimpleName());
+        }
+        UserSession session = redisService.getValue(key, UserSession.class);
+        log.debug("세션 조회 결과: userId={}, session={}", userId, session != null ? "존재" : "null");
+        return session;
     }
 
     public UserSession getSessionByEmail(String email) {
