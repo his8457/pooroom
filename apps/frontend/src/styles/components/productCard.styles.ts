@@ -14,6 +14,10 @@ export const CardContainer = styled.div`
     transform: translateY(-8px);
     box-shadow: ${shadows.lg};
   }
+
+  &:active {
+    transform: translateY(-4px);
+  }
 `;
 
 export const ProductImage = styled.img`

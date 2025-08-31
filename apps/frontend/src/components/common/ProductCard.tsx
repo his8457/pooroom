@@ -26,10 +26,15 @@ interface Product {
 
 interface ProductCardProps {
   product: Product;
+  onClick?: (productId: number) => void;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const { name, price, discountPrice, imageUrl, brand, isNew, isSale } = product;
+export const ProductCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
+  const { id, name, price, discountPrice, imageUrl, brand, isNew, isSale } = product;
+
+  const handleClick = () => {
+    onClick?.(id);
+  };
 
   // 색상 매핑
   const getProductColor = (productName: string) => {
@@ -45,7 +50,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   return (
-    <CardContainer>
+    <CardContainer onClick={handleClick}>
       <PlaceholderImage 
         src={imageUrl}
         alt={name}
