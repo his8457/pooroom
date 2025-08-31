@@ -44,6 +44,9 @@ public class ProductResponse {
     private Boolean isOnSale;
     private Boolean isInStock;
     private BigDecimal effectivePrice;
+    
+    // Unsplash 이미지 URL (프론트엔드에서 설정)
+    private String unsplashImageUrl;
 
     public static ProductResponse from(Product product) {
         return ProductResponse.builder()
