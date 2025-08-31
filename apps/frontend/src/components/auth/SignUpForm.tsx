@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { authService } from '../../api/authService';
 import type { SignUpRequest } from '../../types/auth';
+import { LoadingSpinner } from '../common/LoadingSpinner';
 import {
   Container,
   FormCard,
@@ -16,7 +18,7 @@ import {
   SubmitButton,
   LoginLink,
   getSelectErrorStyles
-} from './styles/auth.styles';
+} from '../../styles/auth/signUpForm.styles';
 
 interface FormData {
   email: string;
@@ -41,6 +43,7 @@ interface FormErrors {
 }
 
 export const SignUpForm: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
@@ -56,12 +59,12 @@ export const SignUpForm: React.FC = () => {
 
   const signUpMutation = useMutation({
     mutationFn: authService.signUp,
-    onSuccess: (data) => {
-      alert('회원가입이 완료되었습니다!');
-      console.log('User created:', data);
+    onSuccess: () => {
+      toast.success('회원가입이 완료되었습니다! 🎉\n로그인 페이지로 이동합니다.');
+      setTimeout(() => navigate('/login'), 2000);
     },
     onError: (error: Error) => {
-      alert(error.message || '회원가입에 실패했습니다.');
+      toast.error(error.message || '회원가입에 실패했습니다. 😢');
     },
   });
 
@@ -277,7 +280,11 @@ export const SignUpForm: React.FC = () => {
             isLoading={signUpMutation.isPending}
             disabled={signUpMutation.isPending}
           >
-            {signUpMutation.isPending ? '회원가입 중...' : '회원가입'}
+            {signUpMutation.isPending ? (
+              <LoadingSpinner type="dots" size="small" showText={false} />
+            ) : (
+              '회원가입'
+            )}
           </SubmitButton>
         </Form>
 

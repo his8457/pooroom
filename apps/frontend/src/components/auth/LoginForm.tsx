@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { authService } from '../../api/authService';
 import type { LoginRequest } from '../../types/auth';
+import { LoadingSpinner } from '../common/LoadingSpinner';
 import {
   Container,
   FormCard,
@@ -15,7 +17,7 @@ import {
   ErrorMessage,
   SubmitButton,
   SignUpLink,
-} from './loginForm.styles';
+} from '../../styles/auth/loginForm.styles';
 
 interface FormData {
   email: string;
@@ -28,6 +30,7 @@ interface FormErrors {
 }
 
 export const LoginForm: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: '',
@@ -41,11 +44,11 @@ export const LoginForm: React.FC = () => {
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('refreshToken', data.refreshToken);
       localStorage.setItem('user', JSON.stringify(data.user));
-      alert('로그인되었습니다!');
-      console.log('Login successful:', data);
+      toast.success('로그인되었습니다! 🎉');
+      setTimeout(() => navigate('/'), 1000);
     },
     onError: (error: Error) => {
-      alert(error.message || '로그인에 실패했습니다.');
+      toast.error(error.message || '로그인에 실패했습니다. 😢');
     },
   });
 
@@ -129,7 +132,11 @@ export const LoginForm: React.FC = () => {
             isLoading={loginMutation.isPending}
             disabled={loginMutation.isPending}
           >
-            {loginMutation.isPending ? '로그인 중...' : '로그인'}
+            {loginMutation.isPending ? (
+              <LoadingSpinner type="dots" size="small" showText={false} />
+            ) : (
+              '로그인'
+            )}
           </SubmitButton>
         </Form>
 
