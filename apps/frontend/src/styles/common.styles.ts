@@ -7,18 +7,28 @@ export const colors = {
     main: '#667eea',
     dark: '#764ba2',
   },
+  primaryDark: '#764ba2',
+  accent: '#ef4444',
+  danger: '#ef4444',
   text: {
     primary: '#374151',
     secondary: '#6b7280',
     muted: '#9ca3af',
+    inverse: '#ffffff',
+    disabled: '#9ca3af',
   },
   border: {
     normal: '#e5e7eb',
     error: '#ef4444',
+    light: '#e5e7eb',
+    hover: '#d1d5db',
   },
   background: {
     light: '#fafafa',
     white: '#ffffff',
+    card: '#ffffff',
+    hover: '#f9fafb',
+    disabled: '#f3f4f6',
   },
   error: '#ef4444',
   success: '#10b981',
@@ -27,29 +37,41 @@ export const colors = {
 // 공통 스페이싱
 export const spacing = {
   xs: '4px',
+  small: '8px',
   sm: '8px',
+  medium: '16px',
   md: '16px',
+  large: '24px',
   lg: '24px',
+  xlarge: '32px',
   xl: '32px',
   xxl: '48px',
 };
 
 // 공통 border radius
 export const borderRadius = {
+  small: '8px',
   sm: '8px',
+  medium: '12px',
   md: '12px',
+  large: '16px',
   lg: '16px',
   xl: '20px',
   xxl: '24px',
+  full: '50%',
 };
 
 // 공통 폰트 크기
 export const fontSize = {
   xs: '0.75rem',
+  small: '0.875rem',
   sm: '0.875rem',
   base: '1rem',
+  medium: '1rem',
   lg: '1.125rem',
+  large: '1.125rem',
   xl: '1.25rem',
+  xlarge: '1.25rem',
   '2xl': '1.5rem',
   '3xl': '2rem',
   '4xl': '2.5rem',
@@ -154,3 +176,17 @@ export const BaseInputGroup = styled.div`
   flex-direction: column;
   gap: ${spacing.sm};
 `;
+
+// 공통 전환 효과
+export const transitions = {
+  fast: 'all 0.2s ease',
+  medium: 'all 0.3s ease',
+  slow: 'all 0.5s ease',
+};
+
+// 반응형 브레이크포인트
+export const breakpoints = {
+  mobile: '768px',
+  tablet: '1024px',
+  desktop: '1200px',
+};
