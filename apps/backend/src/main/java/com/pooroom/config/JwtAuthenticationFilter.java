@@ -2,6 +2,7 @@ package com.pooroom.config;
 
 import com.pooroom.common.exception.BusinessException;
 import com.pooroom.common.exception.ErrorCode;
+import com.pooroom.domain.auth.service.SessionService;
 import com.pooroom.domain.user.entity.User;
 import com.pooroom.domain.user.entity.UserStatus;
 import com.pooroom.domain.user.repository.UserRepository;
@@ -29,6 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final SessionService sessionService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -44,6 +46,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 사용자 검증 (활성 상태 확인)
                 User user = userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
                         .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+                // Redis 세션 유효성 검증
+                if (!sessionService.isSessionValid(user.getId())) {
+                    log.debug("유효하지 않은 세션: userId={}, email={}", user.getId(), email);
+                    SecurityContextHolder.clearContext();
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+
+                // 마지막 활동 시간 업데이트
+                sessionService.updateLastActivity(user.getId());
 
                 // Authentication 객체 생성
                 List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
