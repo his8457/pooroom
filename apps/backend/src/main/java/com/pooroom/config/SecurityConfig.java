@@ -48,6 +48,10 @@ public class SecurityConfig {
                         // 시스템 모니터링용 
                         .requestMatchers("/api/health/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
+                        // 주문, 장바구니, 결제 API (인증 필요)
+                        .requestMatchers("/api/orders/**").authenticated()
+                        .requestMatchers("/api/cart/**").authenticated()
+                        .requestMatchers("/api/payments/**").authenticated()
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )

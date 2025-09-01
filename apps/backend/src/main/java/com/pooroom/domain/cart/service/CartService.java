@@ -206,6 +206,11 @@ public class CartService {
         }
     }
 
+    public Cart getCartEntityByUserId(Long userId) {
+        return cartRepository.findByUserIdWithItems(userId)
+                .orElse(null);
+    }
+
     private void invalidateCartCache(Long userId) {
         cacheService.delete("cart:user:" + userId);
         cacheService.delete("cart:count:" + userId);

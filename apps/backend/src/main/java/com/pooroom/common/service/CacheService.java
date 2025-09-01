@@ -127,4 +127,8 @@ public class CacheService {
     public void delete(String key) {
         redisService.deleteKey(key);
     }
+
+    public void deletePattern(String pattern) {
+        redisService.deleteKeysByPattern(pattern);
+    }
 }

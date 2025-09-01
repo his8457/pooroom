@@ -76,4 +76,13 @@ public class RedisService {
     public Long getExpire(String key) {
         return redisTemplate.getExpire(key, TimeUnit.SECONDS);
     }
+
+    public void deleteKeysByPattern(String pattern) {
+        try {
+            redisTemplate.delete(redisTemplate.keys(pattern));
+            log.debug("Redis 패턴 키 삭제: {}", pattern);
+        } catch (Exception e) {
+            log.error("Redis 패턴 키 삭제 실패: pattern={}, error={}", pattern, e.getMessage());
+        }
+    }
 }
