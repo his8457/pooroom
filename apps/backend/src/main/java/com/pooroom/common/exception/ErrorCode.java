@@ -48,6 +48,22 @@ public enum ErrorCode {
     CART_ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "CR002", "장바구니 상품을 찾을 수 없습니다."),
     CART_ITEM_ALREADY_EXISTS(HttpStatus.CONFLICT, "CR003", "이미 장바구니에 담긴 상품입니다."),
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "CR004", "접근 권한이 없습니다."),
+    CART_EMPTY(HttpStatus.BAD_REQUEST, "CR005", "장바구니가 비어있습니다."),
+
+    // Order
+    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "OR001", "주문을 찾을 수 없습니다."),
+    ORDER_CANNOT_CANCEL(HttpStatus.BAD_REQUEST, "OR002", "취소할 수 없는 주문입니다."),
+    ORDER_CANNOT_REFUND(HttpStatus.BAD_REQUEST, "OR003", "환불할 수 없는 주문입니다."),
+    ORDER_ALREADY_CANCELLED(HttpStatus.BAD_REQUEST, "OR004", "이미 취소된 주문입니다."),
+    ORDER_ALREADY_COMPLETED(HttpStatus.BAD_REQUEST, "OR005", "이미 완료된 주문입니다."),
+
+    // Payment
+    PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "PM001", "결제 정보를 찾을 수 없습니다."),
+    PAYMENT_ALREADY_PROCESSED(HttpStatus.BAD_REQUEST, "PM002", "이미 처리된 결제입니다."),
+    PAYMENT_AMOUNT_MISMATCH(HttpStatus.BAD_REQUEST, "PM003", "결제 금액이 일치하지 않습니다."),
+    PAYMENT_VERIFICATION_FAILED(HttpStatus.BAD_REQUEST, "PM004", "결제 검증에 실패했습니다."),
+    PAYMENT_CANCELLED_BY_USER(HttpStatus.BAD_REQUEST, "PM005", "사용자가 결제를 취소했습니다."),
+    PAYMENT_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "PM006", "결제 시간이 초과되었습니다."),
 
     // File
     FILE_UPLOAD_ERROR(HttpStatus.BAD_REQUEST, "F001", "파일 업로드에 실패했습니다."),

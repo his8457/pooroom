@@ -145,4 +145,34 @@ public class ProductService {
     public long countActiveProducts() {
         return productRepository.countByStatus(ProductStatus.ACTIVE);
     }
+
+    @Transactional
+    public void reduceStock(Long productId, Integer quantity) {
+        Product product = findById(productId);
+        
+        if (product.getStockQuantity() < quantity) {
+            throw new BusinessException(ErrorCode.INSUFFICIENT_STOCK);
+        }
+        
+        product.reduceStock(quantity);
+        productRepository.save(product);
+        
+        cacheService.invalidateProductCache(productId);
+        
+        log.info("상품 재고 차감: productId={}, quantity={}, remainingStock={}", 
+                productId, quantity, product.getStockQuantity());
+    }
+
+    @Transactional
+    public void increaseStock(Long productId, Integer quantity) {
+        Product product = findById(productId);
+        
+        product.increaseStock(quantity);
+        productRepository.save(product);
+        
+        cacheService.invalidateProductCache(productId);
+        
+        log.info("상품 재고 복원: productId={}, quantity={}, currentStock={}", 
+                productId, quantity, product.getStockQuantity());
+    }
 }
