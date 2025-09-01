@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { Cart } from '../../api/cartService';
 import { useCartStore } from '../../store/cartStore';
 import { LoadingSpinner } from '../common/LoadingSpinner';
@@ -19,6 +20,7 @@ interface CartSummaryProps {
 }
 
 export const CartSummary: React.FC<CartSummaryProps> = ({ cart }) => {
+  const navigate = useNavigate();
   const { clearCart, isLoading } = useCartStore();
 
   const handleClearCart = async () => {
@@ -28,8 +30,7 @@ export const CartSummary: React.FC<CartSummaryProps> = ({ cart }) => {
   };
 
   const handleCheckout = () => {
-    // TODO: 주문/결제 페이지로 이동
-    alert('주문/결제 기능은 아직 구현되지 않았습니다.');
+    navigate('/checkout');
   };
 
   return (

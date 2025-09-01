@@ -5,6 +5,8 @@ import { LoginPage } from './pages/LoginPage';
 import { MainPage } from './pages/MainPage';
 import { ProductListPage } from './pages/ProductListPage';
 import { CartPage } from './pages/CartPage';
+import { CheckoutPage } from './pages/CheckoutPage';
+import { OrderCompletePage } from './pages/OrderCompletePage';
 import { SpinnerTestPage } from './pages/SpinnerTestPage';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 import { PageLoader } from './components/common/PageLoader';
@@ -34,6 +36,22 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <CartPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/checkout" 
+          element={
+            <ProtectedRoute>
+              <CheckoutPage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/order-complete" 
+          element={
+            <ProtectedRoute>
+              <OrderCompletePage />
             </ProtectedRoute>
           } 
         />
