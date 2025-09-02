@@ -6,6 +6,7 @@ export const colors = {
     gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     main: '#667eea',
     dark: '#764ba2',
+    light: '#8b94f7',
   },
   primaryDark: '#764ba2',
   accent: '#ef4444',
@@ -24,6 +25,8 @@ export const colors = {
     light: '#e5e7eb',
     hover: '#d1d5db',
     primary: '#e5e7eb',
+    medium: '#d1d5db',
+    dark: '#9ca3af',
   },
   background: {
     light: '#fafafa',
@@ -33,13 +36,21 @@ export const colors = {
     disabled: '#f3f4f6',
     primary: '#ffffff',
     secondary: '#f9fafb',
+    normal: '#ffffff',
+    medium: '#f3f4f6',
+    dark: '#374151',
   },
   error: '#ef4444',
   success: '#10b981',
+  secondary: {
+    main: '#6b7280',
+    dark: '#4b5563',
+    light: '#9ca3af',
+  },
   status: {
     error: '#ef4444',
-    success: '#10b981',
     warning: '#f59e0b',
+    success: '#10b981',
     info: '#3b82f6',
   },
 };
@@ -71,40 +82,58 @@ export const borderRadius = {
   full: '50%',
 };
 
-// 공통 타이포그래피
-export const typography = {
-  fontSize: {
-    xs: '0.75rem',
-    small: '0.875rem',
-    sm: '0.875rem',
-    base: '1rem',
-    medium: '1rem',
-    md: '1rem',
-    lg: '1.125rem',
-    large: '1.125rem',
-    xl: '1.25rem',
-    xlarge: '1.25rem',
-    '2xl': '1.5rem',
-    '3xl': '2rem',
-    '4xl': '2.5rem',
-  },
-  fontWeight: {
-    normal: '400',
-    medium: '500',
-    semibold: '600',
-    bold: '700',
-  },
+// 공통 폰트 크기
+export const fontSize = {
+  xs: '0.75rem',
+  xsmall: '0.75rem',
+  xxsmall: '0.75rem',
+  small: '0.875rem',
+  sm: '0.875rem',
+  base: '1rem',
+  medium: '1rem',
+  lg: '1.125rem',
+  large: '1.125rem',
+  xl: '1.25rem',
+  xlarge: '1.25rem',
+  '2xl': '1.5rem',
+  '3xl': '2rem',
+  '4xl': '2.5rem',
 };
 
-// 호환성을 위한 기존 fontSize 유지
-export const fontSize = typography.fontSize;
+// 공통 타이포그래피
+export const typography = {
+  h1: `
+    font-size: ${fontSize['2xl']};
+    font-weight: 700;
+    line-height: 1.2;
+  `,
+  h2: `
+    font-size: ${fontSize.xl};
+    font-weight: 600;
+    line-height: 1.3;
+  `,
+  h3: `
+    font-size: ${fontSize.lg};
+    font-weight: 600;
+    line-height: 1.4;
+  `,
+  body: `
+    font-size: ${fontSize.base};
+    font-weight: 400;
+    line-height: 1.6;
+  `,
+  fontSize,
+};
 
 // 공통 박스 쉐도우
 export const shadows = {
   sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+  small: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
   base: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
   md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+  medium: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
   lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+  large: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
   xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
   '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
   focus: () => `0 0 0 3px rgba(102, 126, 234, 0.1)`,

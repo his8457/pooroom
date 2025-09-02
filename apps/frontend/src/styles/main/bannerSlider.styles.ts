@@ -16,7 +16,9 @@ export const SlideWrapper = styled.div`
   transition: transform 0.5s ease-in-out;
 `;
 
-export const Slide = styled.div<{ imageUrl: string }>`
+export const Slide = styled.div.withConfig({
+  shouldForwardProp: (prop) => !['imageUrl'].includes(prop),
+})<{ imageUrl: string }>`
   min-width: 100%;
   height: 100%;
   background-image: url(${props => props.imageUrl});
@@ -85,7 +87,9 @@ export const DotsContainer = styled.div`
   gap: ${spacing.sm};
 `;
 
-export const Dot = styled.button<{ isActive: boolean }>`
+export const Dot = styled.button.withConfig({
+  shouldForwardProp: (prop) => !['isActive'].includes(prop),
+})<{ isActive: boolean }>`
   width: 12px;
   height: 12px;
   border-radius: 50%;
