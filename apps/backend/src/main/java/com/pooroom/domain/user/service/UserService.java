@@ -4,6 +4,8 @@ import com.pooroom.common.exception.BusinessException;
 import com.pooroom.common.exception.ErrorCode;
 import com.pooroom.domain.auth.dto.SignUpRequest;
 import com.pooroom.domain.user.dto.UserResponse;
+import com.pooroom.domain.user.dto.UpdateUserRequest;
+import com.pooroom.domain.user.dto.ChangePasswordRequest;
 import com.pooroom.domain.user.entity.User;
 import com.pooroom.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -73,5 +75,50 @@ public class UserService {
         }
         return userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    @Transactional
+    public UserResponse updateUser(String email, UpdateUserRequest request) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        // 닉네임 중복 검사 (기존 닉네임과 다른 경우에만)
+        if (request.getNickname() != null && 
+            !request.getNickname().equals(user.getNickname()) &&
+            userRepository.existsByNickname(request.getNickname())) {
+            throw new BusinessException(ErrorCode.NICKNAME_DUPLICATION);
+        }
+
+        // 사용자 정보 업데이트
+        user.updateProfile(
+            request.getName(),
+            request.getNickname(),
+            request.getPhoneNumber(),
+            request.getBirthDate(),
+            request.getGender(),
+            request.getProfileImageUrl()
+        );
+
+        User updatedUser = userRepository.save(user);
+        return UserResponse.from(updatedUser);
+    }
+
+    @Transactional
+    public void changePassword(String email, ChangePasswordRequest request) {
+        if (!request.isPasswordMatch()) {
+            throw new BusinessException(ErrorCode.PASSWORD_MISMATCH);
+        }
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        // 현재 비밀번호 확인
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new BusinessException(ErrorCode.PASSWORD_MISMATCH);
+        }
+
+        // 새 비밀번호로 변경
+        user.changePassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }

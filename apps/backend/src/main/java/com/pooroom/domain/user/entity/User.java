@@ -92,10 +92,18 @@ public class User {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void updateProfile(String name, String nickname, String phoneNumber) {
+    public void updateProfile(String name, String nickname, String phoneNumber, LocalDate birthDate, Gender gender, String profileImageUrl) {
         this.name = name;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.profileImageUrl = profileImageUrl;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
         this.updatedAt = LocalDateTime.now();
     }
 
