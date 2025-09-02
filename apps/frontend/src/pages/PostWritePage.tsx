@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { boardService } from '../api/boardService';
 import type { BoardCategory, CreatePostRequest } from '../api/boardService';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { Header } from '../components/layout/Header';
+import { Navigation } from '../components/layout/Navigation';
+import { Footer } from '../components/layout/Footer';
 import {
   WriteContainer,
   WriteHeader,
@@ -146,7 +149,10 @@ export const PostWritePage: React.FC = () => {
   const isInquiryBoard = category.name === '상품문의';
 
   return (
-    <WriteContainer>
+    <>
+      <Header />
+      <Navigation />
+      <WriteContainer>
       <WriteHeader>
         <WriteTitle>{category.name} 글쓰기</WriteTitle>
       </WriteHeader>
@@ -255,6 +261,8 @@ export const PostWritePage: React.FC = () => {
           </SubmitButton>
         </ButtonContainer>
       </FormContainer>
-    </WriteContainer>
+      </WriteContainer>
+      <Footer />
+    </>
   );
 };

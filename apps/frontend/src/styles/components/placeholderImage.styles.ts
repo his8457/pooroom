@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
-export const PlaceholderContainer = styled.div<{
+export const PlaceholderContainer = styled.div.withConfig({
+  shouldForwardProp: (prop) => !['fallbackColor'].includes(prop),
+})<{
   width: number;
   height: number;
   fallbackColor: string;

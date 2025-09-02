@@ -52,6 +52,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/orders/**").authenticated()
                         .requestMatchers("/api/cart/**").authenticated()
                         .requestMatchers("/api/payments/**").authenticated()
+                        // 게시판 API (인증 필요)
+                        .requestMatchers("/api/board/**").authenticated()
+                        // 챗봇 API (인증 선택적 - 비로그인 사용자도 이용 가능)
+                        .requestMatchers("/api/chat/**").permitAll()
                         // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )
