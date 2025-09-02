@@ -91,6 +91,7 @@ export const fontSize = {
   sm: '0.875rem',
   base: '1rem',
   medium: '1rem',
+  md: '1rem',
   lg: '1.125rem',
   large: '1.125rem',
   xl: '1.25rem',
@@ -123,6 +124,12 @@ export const typography = {
     line-height: 1.6;
   `,
   fontSize,
+  fontWeight: {
+    normal: '400',
+    medium: '500',
+    semibold: '600',
+    bold: '700',
+  },
 };
 
 // 공통 박스 쉐도우

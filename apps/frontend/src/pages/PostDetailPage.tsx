@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { boardService } from '../api/boardService';
 import type { Post, Comment, CreateCommentRequest } from '../api/boardService';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { Header } from '../components/layout/Header';
+import { Navigation } from '../components/layout/Navigation';
+import { Footer } from '../components/layout/Footer';
 import {
   DetailContainer,
   PostContainer,
@@ -159,7 +162,10 @@ export const PostDetailPage: React.FC = () => {
   }
 
   return (
-    <DetailContainer>
+    <>
+      <Header />
+      <Navigation />
+      <DetailContainer>
       <PostContainer>
         <PostHeader>
           <PostTitle>
@@ -276,6 +282,8 @@ export const PostDetailPage: React.FC = () => {
           ))}
         </CommentList>
       </CommentSection>
-    </DetailContainer>
+      </DetailContainer>
+      <Footer />
+    </>
   );
 };

@@ -6,6 +6,7 @@ import { RecommendedSection } from '../components/main/RecommendedSection';
 import { CategorySection } from '../components/main/CategorySection';
 import { NewProductsSection } from '../components/main/NewProductsSection';
 import { Footer } from '../components/layout/Footer';
+import { FloatingChat } from '../components/chat/FloatingChat';
 import { MainPageContainer } from '../styles/pages/mainPage.styles';
 
 export const MainPage: React.FC = () => {
@@ -20,6 +21,7 @@ export const MainPage: React.FC = () => {
         <NewProductsSection />
       </main>
       <Footer />
+      <FloatingChat />
     </MainPageContainer>
   );
 };
