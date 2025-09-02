@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { boardService } from '../api/boardService';
 import type { BoardCategory } from '../api/boardService';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { Header } from '../components/layout/Header';
+import { Navigation } from '../components/layout/Navigation';
+import { Footer } from '../components/layout/Footer';
 import {
   BoardMainContainer,
   BoardTitle,
@@ -59,25 +62,30 @@ export const BoardMainPage: React.FC = () => {
   }
 
   return (
-    <BoardMainContainer>
-      <BoardTitle>게시판</BoardTitle>
-      
-      <CategoryGrid>
-        {categories.map((category) => (
-          <CategoryCard 
-            key={category.id} 
-            onClick={() => handleCategoryClick(category.id)}
-          >
-            <CategoryIcon>
-              {getCategoryIcon(category.name)}
-            </CategoryIcon>
-            <CategoryName>{category.name}</CategoryName>
-            {category.description && (
-              <CategoryDescription>{category.description}</CategoryDescription>
-            )}
-          </CategoryCard>
-        ))}
-      </CategoryGrid>
-    </BoardMainContainer>
+    <>
+      <Header />
+      <Navigation />
+      <BoardMainContainer>
+        <BoardTitle>게시판</BoardTitle>
+        
+        <CategoryGrid>
+          {categories.map((category) => (
+            <CategoryCard 
+              key={category.id} 
+              onClick={() => handleCategoryClick(category.id)}
+            >
+              <CategoryIcon>
+                {getCategoryIcon(category.name)}
+              </CategoryIcon>
+              <CategoryName>{category.name}</CategoryName>
+              {category.description && (
+                <CategoryDescription>{category.description}</CategoryDescription>
+              )}
+            </CategoryCard>
+          ))}
+        </CategoryGrid>
+      </BoardMainContainer>
+      <Footer />
+    </>
   );
 };

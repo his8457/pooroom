@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { boardService } from '../api/boardService';
 import type { BoardCategory, Post, PageResponse } from '../api/boardService';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { Header } from '../components/layout/Header';
+import { Navigation } from '../components/layout/Navigation';
+import { Footer } from '../components/layout/Footer';
 import { 
   BoardListContainer,
   BoardHeader,
@@ -15,6 +18,7 @@ import {
   PostStats,
   SearchContainer,
   SearchInput,
+  SearchButton,
   WriteButton,
   PaginationContainer,
   PageButton,
@@ -125,7 +129,10 @@ export const BoardListPage: React.FC = () => {
   }
 
   return (
-    <BoardListContainer>
+    <>
+      <Header />
+      <Navigation />
+      <BoardListContainer>
       <BoardHeader>
         <BoardTitle>{category.name}</BoardTitle>
         {category.description && (
@@ -141,9 +148,9 @@ export const BoardListPage: React.FC = () => {
           onChange={(e) => setSearchKeyword(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
         />
-        <button onClick={handleSearch} disabled={searching}>
+        <SearchButton onClick={handleSearch} disabled={searching}>
           {searching ? '검색 중...' : '검색'}
-        </button>
+        </SearchButton>
         <WriteButton onClick={handleWritePost}>
           글쓰기
         </WriteButton>
@@ -216,5 +223,7 @@ export const BoardListPage: React.FC = () => {
         </PaginationContainer>
       )}
     </BoardListContainer>
+      <Footer />
+    </>
   );
 };

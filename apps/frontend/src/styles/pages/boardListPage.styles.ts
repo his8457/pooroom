@@ -76,6 +76,35 @@ export const WriteButton = styled.button`
   transition: all 0.2s ease;
 `;
 
+export const SearchButton = styled.button`
+  background-color: ${colors.secondary.main};
+  color: white;
+  border: none;
+  padding: ${spacing.medium} ${spacing.large};
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 48px;
+  min-width: 80px;
+  
+  &:hover:not(:disabled) {
+    background-color: ${colors.secondary.dark};
+    transform: translateY(-1px);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  transition: all 0.2s ease;
+`;
+
 export const PostListContainer = styled.div`
   border: 1px solid ${colors.border.light};
   border-radius: 12px;
