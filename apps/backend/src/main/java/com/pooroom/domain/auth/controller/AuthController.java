@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,6 +60,13 @@ public class AuthController {
     public ResponseEntity<ApiResponse<Boolean>> checkEmailDuplication(@RequestParam String email) {
         boolean exists = userService.existsByEmail(email);
         return ResponseEntity.ok(ApiResponse.success(!exists));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<UserResponse>> getCurrentUser(Authentication authentication) {
+        String email = authentication.getName();
+        UserResponse user = userService.getUserByEmail(email);
+        return ResponseEntity.ok(ApiResponse.success(user));
     }
 
     private String extractDeviceInfo(HttpServletRequest request) {

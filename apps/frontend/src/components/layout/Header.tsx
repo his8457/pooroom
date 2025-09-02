@@ -41,7 +41,7 @@ export const Header: React.FC = () => {
 
         <UserActions>
           <CartIcon />
-          <ActionButton type="button">
+          <ActionButton type="button" onClick={() => navigate('/mypage')}>
             👤
           </ActionButton>
           <LogoutButton type="button" onClick={handleLogout}>

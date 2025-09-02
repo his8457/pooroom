@@ -42,4 +42,12 @@ export const authService = {
     const response = await apiClient.get<ApiResponse<boolean>>(`/auth/check-email?email=${email}`);
     return response.data.data!;
   },
+
+  getCurrentUser: async (): Promise<UserResponse> => {
+    const response = await apiClient.get<ApiResponse<UserResponse>>('/auth/me');
+    if (!response.data.success) {
+      throw new Error(response.data.message || '사용자 정보를 가져올 수 없습니다.');
+    }
+    return response.data.data!;
+  },
 };

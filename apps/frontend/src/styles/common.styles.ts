@@ -16,12 +16,14 @@ export const colors = {
     muted: '#9ca3af',
     inverse: '#ffffff',
     disabled: '#9ca3af',
+    placeholder: '#9ca3af',
   },
   border: {
     normal: '#e5e7eb',
     error: '#ef4444',
     light: '#e5e7eb',
     hover: '#d1d5db',
+    primary: '#e5e7eb',
   },
   background: {
     light: '#fafafa',
@@ -29,9 +31,17 @@ export const colors = {
     card: '#ffffff',
     hover: '#f9fafb',
     disabled: '#f3f4f6',
+    primary: '#ffffff',
+    secondary: '#f9fafb',
   },
   error: '#ef4444',
   success: '#10b981',
+  status: {
+    error: '#ef4444',
+    success: '#10b981',
+    warning: '#f59e0b',
+    info: '#3b82f6',
+  },
 };
 
 // 공통 스페이싱
@@ -61,21 +71,33 @@ export const borderRadius = {
   full: '50%',
 };
 
-// 공통 폰트 크기
-export const fontSize = {
-  xs: '0.75rem',
-  small: '0.875rem',
-  sm: '0.875rem',
-  base: '1rem',
-  medium: '1rem',
-  lg: '1.125rem',
-  large: '1.125rem',
-  xl: '1.25rem',
-  xlarge: '1.25rem',
-  '2xl': '1.5rem',
-  '3xl': '2rem',
-  '4xl': '2.5rem',
+// 공통 타이포그래피
+export const typography = {
+  fontSize: {
+    xs: '0.75rem',
+    small: '0.875rem',
+    sm: '0.875rem',
+    base: '1rem',
+    medium: '1rem',
+    md: '1rem',
+    lg: '1.125rem',
+    large: '1.125rem',
+    xl: '1.25rem',
+    xlarge: '1.25rem',
+    '2xl': '1.5rem',
+    '3xl': '2rem',
+    '4xl': '2.5rem',
+  },
+  fontWeight: {
+    normal: '400',
+    medium: '500',
+    semibold: '600',
+    bold: '700',
+  },
 };
+
+// 호환성을 위한 기존 fontSize 유지
+export const fontSize = typography.fontSize;
 
 // 공통 박스 쉐도우
 export const shadows = {
