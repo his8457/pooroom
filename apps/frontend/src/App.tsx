@@ -8,6 +8,7 @@ import { CartPage } from './pages/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { OrderCompletePage } from './pages/OrderCompletePage';
 import { SpinnerTestPage } from './pages/SpinnerTestPage';
+import { MyPage } from './pages/MyPage';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 import { PageLoader } from './components/common/PageLoader';
 import { usePageLoading } from './hooks/usePageLoading';
@@ -52,6 +53,14 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <OrderCompletePage />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/mypage" 
+          element={
+            <ProtectedRoute>
+              <MyPage />
             </ProtectedRoute>
           } 
         />
