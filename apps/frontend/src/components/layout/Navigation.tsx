@@ -14,6 +14,7 @@ const categories = [
   { id: 5, name: '신발', path: '/products?category=shoes' },
   { id: 6, name: '액세서리', path: '/products?category=accessories' },
   { id: 7, name: 'SALE', path: '/products?sale=true' },
+  { id: 8, name: '게시판', path: '/board' },
 ];
 
 export const Navigation: React.FC = () => {

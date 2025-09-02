@@ -9,6 +9,10 @@ import { CheckoutPage } from './pages/CheckoutPage';
 import { OrderCompletePage } from './pages/OrderCompletePage';
 import { SpinnerTestPage } from './pages/SpinnerTestPage';
 import { MyPage } from './pages/MyPage';
+import { BoardMainPage } from './pages/BoardMainPage';
+import { BoardListPage } from './pages/BoardListPage';
+import { PostWritePage } from './pages/PostWritePage';
+import { PostDetailPage } from './pages/PostDetailPage';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 import { PageLoader } from './components/common/PageLoader';
 import { usePageLoading } from './hooks/usePageLoading';
@@ -54,16 +58,27 @@ function AppContent() {
             <ProtectedRoute>
               <OrderCompletePage />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/mypage" 
+        <Route
+          path="/mypage"
           element={
             <ProtectedRoute>
               <MyPage />
             </ProtectedRoute>
-          } 
+          }
         />
+        <Route path="/board" element={<BoardMainPage />} />
+        <Route path="/board/:categoryId" element={<BoardListPage />} />
+        <Route
+          path="/board/:categoryId/write"
+          element={
+            <ProtectedRoute>
+              <PostWritePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/board/post/:postId" element={<PostDetailPage />} />
       </Routes>
     </>
   );
