@@ -44,6 +44,10 @@ public class PageResponse<T> {
         );
     }
 
+    public static <T> PageResponse<T> from(Page<T> page) {
+        return of(page);
+    }
+
     // Getters
     public List<T> getContent() {
         return content;
