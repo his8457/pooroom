@@ -23,6 +23,7 @@ out/
 # 환경 변수 파일들 (프로젝트 루트)
 .env
 .env.local
+.env.production
 .env.development.local
 .env.test.local
 .env.production.local
@@ -89,7 +90,6 @@ logs/
 *.log
 
 # 데이터베이스 백업
-*.sql
 dump.rdb
 
 # ===================================
