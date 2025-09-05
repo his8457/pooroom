@@ -382,10 +382,6 @@ INSERT INTO `brands` (`name`, `description`) VALUES
 ('POOROOM BASIC', 'POOROOM 베이직 라인'),
 ('POOROOM PREMIUM', 'POOROOM 프리미엄 라인');
 
--- 권한 설정
-GRANT ALL PRIVILEGES ON `pooroom_db`.* TO 'pooroom_user'@'%';
-FLUSH PRIVILEGES;
-
 -- ===========================================
 -- 게시판 관리 테이블
 -- ===========================================
