@@ -1,0 +1,163 @@
+name: Deploy to AWS EC2
+
+on:
+  # develop 브랜치로 푸시 시 테스트만 실행
+  push:
+    branches: [ develop ]
+  
+  # main 브랜치로 PR 생성/업데이트 시 테스트 실행
+  pull_request:
+    branches: [ main ]
+    types: [ opened, synchronize, reopened ]
+  
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test & Build
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    # 백엔드 테스트 및 빌드
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        
+    - name: Cache Maven dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+        
+    - name: Test & Build Backend
+      working-directory: ./apps/backend
+      run: |
+        chmod +x mvnw
+        ./mvnw clean compile
+        
+    # 프론트엔드 테스트 및 빌드
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: './apps/frontend/package-lock.json'
+        
+    - name: Install Frontend Dependencies
+      working-directory: ./apps/frontend
+      run: npm ci
+      
+    - name: Build Frontend
+      working-directory: ./apps/frontend
+      run: |
+        npm run build
+        npm run type-check
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    name: Deploy to EC2
+    # main 브랜치로 직접 push되거나 PR이 merge될 때만 배포 실행
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    # EC2 배포
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          cd /home/ubuntu/pooroom
+          
+          # Git 최신 코드 pull
+          git pull origin main
+          
+          # 환경변수 파일들 생성 (3개)
+          
+          # 1. 루트 .env (Docker Compose용)
+          cat > .env << EOF
+          DB_HOST=mysql
+          DB_PORT=3306
+          DB_NAME=pooroom_db
+          DB_USERNAME=pooroom_user
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
+          REDIS_HOST=redis
+          REDIS_PORT=6379
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          JWT_EXPIRATION=3600
+          JWT_REFRESH_EXPIRATION=604800
+          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+          OPENAI_API_URL=https://api.openai.com/v1/chat/completions
+          CORS_ALLOWED_ORIGINS=http://localhost
+          GRAFANA_ADMIN_PASSWORD=${{ secrets.GRAFANA_ADMIN_PASSWORD }}
+          EOF
+          
+          # 2. 백엔드 .env (Spring Boot용)
+          cat > apps/backend/.env << EOF
+          DB_HOST=mysql
+          DB_PORT=3306
+          DB_NAME=pooroom_db
+          DB_USERNAME=pooroom_user
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          REDIS_HOST=redis
+          REDIS_PORT=6379
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          JWT_EXPIRATION=3600
+          JWT_REFRESH_EXPIRATION=604800
+          SERVER_PORT=8080
+          SPRING_PROFILES_ACTIVE=production
+          LOG_LEVEL_ROOT=WARN
+          LOG_LEVEL_APP=INFO
+          LOG_LEVEL_SQL=WARN
+          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+          OPENAI_API_URL=https://api.openai.com/v1/chat/completions
+          CORS_ALLOWED_ORIGINS=http://localhost
+          EOF
+          
+          # 3. 프론트엔드 .env (Vite용)
+          cat > apps/frontend/.env << EOF
+          VITE_API_BASE_URL=http://localhost/api
+          VITE_API_TIMEOUT=10000
+          VITE_APP_ENV=production
+          VITE_APP_VERSION=1.0.0
+          VITE_ENABLE_MOCK_API=false
+          VITE_ENABLE_ANALYTICS=false
+          VITE_UNSPLASH_ACCESS_KEY=${{ secrets.UNSPLASH_ACCESS_KEY }}
+          VITE_KAKAO_MAP_API_KEY=${{ secrets.KAKAO_MAP_API_KEY }}
+          VITE_TOSS_PAYMENTS_CLIENT_KEY=${{ secrets.TOSS_PAYMENTS_CLIENT_KEY }}
+          VITE_IAMPORT_IMP_CODE=${{ secrets.IAMPORT_IMP_CODE }}
+          EOF
+          
+          # 기존 컨테이너 정리
+          docker compose down
+          
+          # 새 이미지로 빌드 및 실행
+          docker compose -f docker-compose.prod.yml up --build -d
+          
+          # 헬스체크 대기
+          sleep 60
+          
+          # 배포 상태 확인
+          echo "=== Docker 컨테이너 상태 확인 ==="
+          docker ps
+          
+          echo "=== 백엔드 API 헬스체크 ==="
+          curl -f http://localhost/api/health || exit 1
+          
+          echo "=== 프론트엔드 접근 테스트 ==="
+          curl -f http://localhost/ || exit 1
+          
+          echo "=== 배포 완료 ==="
+          echo "Frontend: http://$(curl -s ifconfig.me)/"
+          echo "Backend API: http://$(curl -s ifconfig.me)/api/health"
+          echo "Grafana: http://$(curl -s ifconfig.me):3000 (admin/admin123)"

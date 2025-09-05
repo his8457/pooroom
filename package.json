@@ -1,0 +1,41 @@
+{
+  "name": "pooroom",
+  "version": "1.0.0",
+  "description": "POOROOM 온라인 쇼핑몰 이커머스 플랫폼",
+  "private": true,
+  "scripts": {
+    "docker:start": "docker-compose up -d",
+    "docker:stop": "docker-compose down",
+    "docker:status": "docker-compose ps",
+    "docker:logs": "docker-compose logs -f",
+    "docker:clean": "docker-compose down -v",
+    "dev:start": "bash scripts/start-local.sh",
+    "dev:stop": "bash scripts/stop-local.sh",
+    "dev:backend": "cd apps/backend && ./mvnw spring-boot:run",
+    "dev:frontend": "cd apps/frontend && npm run dev",
+    "install:all": "cd apps/frontend && npm install && cd ../backend && ./mvnw dependency:resolve",
+    "build:backend": "cd apps/backend && ./mvnw clean package",
+    "build:frontend": "cd apps/frontend && npm run build",
+    "test:backend": "cd apps/backend && ./mvnw test",
+    "test:frontend": "cd apps/frontend && npm test",
+    "lint:frontend": "cd apps/frontend && npm run lint",
+    "format:frontend": "cd apps/frontend && npm run format"
+  },
+  "keywords": [
+    "ecommerce",
+    "shopping-mall",
+    "fashion",
+    "spring-boot",
+    "react",
+    "typescript",
+    "mysql",
+    "redis",
+    "women-fashion"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
+}

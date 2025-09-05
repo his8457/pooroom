@@ -1,0 +1,118 @@
+# ===================================
+# 공통 IDE & 에디터 설정
+# ===================================
+
+# JetBrains IDEs (IntelliJ IDEA, WebStorm 등)
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+.idea_modules/
+
+# VS Code (프로젝트 루트 레벨)
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.history/
+
+# ===================================
+# 환경 변수 & 설정
+# ===================================
+
+# 환경 변수 파일들 (프로젝트 루트)
+.env
+.env.local
+.env.production
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
+
+# 환경 변수 파일들 (각 앱별)
+apps/backend/.env
+apps/frontend/.env
+!apps/backend/.env.example
+!apps/frontend/.env.example
+
+# 데이터베이스 로컬 파일들
+*.db
+*.sqlite
+*.sqlite3
+
+# 설정 파일들
+config/local.*
+*-local.properties
+*-local.yml
+application-local.*
+
+# ===================================
+# OS & System Files
+# ===================================
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.tmp
+*.temp
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Linux
+*~
+
+# ===================================
+# Docker & 인프라
+# ===================================
+.dockerignore
+docker-compose.override.yml
+
+# ===================================
+# 로그 & 백업 파일
+# ===================================
+logs/
+*.log
+
+# 데이터베이스 백업
+dump.rdb
+
+# ===================================
+# 임시 파일
+# ===================================
+*.swp
+*.swo
+*~
+*.tmp
+*.temp
+
+# ===================================
+# 문서 & 기타
+# ===================================
+# 임시 문서
+notes/
+TODO.md
+.notes/
+#CLAUDE
+CLAUDE.md
+.claude/
+
+# 압축 파일
+*.zip
+*.tar.gz
+*.rar
